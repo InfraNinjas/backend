@@ -9,7 +9,7 @@ COPY --chown=node:root . .
 RUN npm run build
 
 RUN mkdir -p /usr/src/app && \
-  chown -R node:root /usr/src/app \
+  chown -R node:root /usr/src/app && \
   chmod -R g=u /usr/src/app 
 
 USER node
