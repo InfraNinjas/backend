@@ -1,15 +1,18 @@
 FROM docker.io/node:lts-slim
 
-RUN mkdir -p /usr/src/app && chown -R node:node /usr/src/app
 WORKDIR /usr/src/app
 
-USER node
-
-COPY --chown=node:node package.json .
+COPY --chown=node:root package.json .
 RUN npm install
 
-COPY --chown=node:node . .
+COPY --chown=node:root . .
 RUN npm run build
+
+RUN mkdir -p /usr/src/app && \
+  chown -R node:root /usr/src/app \
+  chmod -R g=u /usr/src/app 
+
+USER node
 
 ENTRYPOINT ["npm", "run"]
 CMD ["start"]
