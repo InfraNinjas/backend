@@ -1,23 +1,15 @@
 FROM docker.io/node:lts-slim
 
+RUN mkdir -p /usr/src/app && chown -R node:node /usr/src/app
 WORKDIR /usr/src/app
 
-RUN groupadd -g 10001 dotnet && \
-   useradd -u 10000 -g dotnet dotnet \
-   && chown -R dotnet:dotnet /usr/src/app
-
-USER dotnet:dotnet
-
-WORKDIR /usr/src/app
-
-COPY package.json .
-
+COPY --chown=node:node package.json .
 RUN npm install
 
-COPY . .
-
+COPY --chown=node:node . .
 RUN npm run build
 
-ENTRYPOINT ["npm", "run"]
+USER node
 
+ENTRYPOINT ["npm", "run"]
 CMD ["start"]
