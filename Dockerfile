@@ -8,6 +8,8 @@ RUN groupadd -g 10001 dotnet && \
 
 USER dotnet:dotnet
 
+WORKDIR /usr/src/app
+
 COPY package.json .
 
 RUN npm install
