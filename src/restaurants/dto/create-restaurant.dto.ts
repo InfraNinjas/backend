@@ -1,4 +1,4 @@
-import { IsDecimal, IsNotEmpty, IsString } from "class-validator";
+import { IsDecimal, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateRestaurantDto {
   @IsNotEmpty()
@@ -12,4 +12,12 @@ export class CreateRestaurantDto {
   @IsNotEmpty()
   @IsDecimal()
   y: number;
+
+  @IsNotEmpty()
+  @IsDecimal()
+  star: number;
+
+  @IsNotEmpty()
+  @IsString()
+  review: string;
 }
