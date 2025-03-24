@@ -12,29 +12,38 @@ export class ReviewsService {
     @InjectRepository(Review)
     private readonly reviewRepository: Repository<Review>,
     @InjectRepository(Restaurant)
-    private readonly restaurantsRepository: Repository<Restaurant>
+    private readonly restaurantsRepository: Repository<Restaurant>,
   ) {}
 
   async create(createReviewDto: CreateReviewDto) {
-    const newReview = this.reviewRepository.create(createReviewDto)
+    const newReview = this.reviewRepository.create(createReviewDto);
     const result = await this.restaurantsRepository.findOne({
       where: {
-        id: createReviewDto.restaurant_id
-      }
-    })
-    if(result == null) return 'err'
-    console.log(result)
-    newReview.restaurant = result
-    return await this.reviewRepository.save(newReview)
+        id: createReviewDto.restaurant_id,
+      },
+    });
+    if (result == null) return 'err';
+    console.log(result);
+    newReview.restaurant = result;
+    return await this.reviewRepository.save(newReview);
   }
 
   async findAll() {
     return await this.reviewRepository.find();
   }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} review`;
-  // }
+  async findOne(id: number) {
+    const reviews = (
+      await this.restaurantsRepository.findOne({
+        where: {
+          id,
+        },
+        relations: ['reviews'],
+      })
+    )?.reviews;
+    if (!reviews) return { seccess: false };
+    return reviews;
+  }
 
   // update(id: number, updateReviewDto: UpdateReviewDto) {
   //   return `This action updates a #${id} review`;
